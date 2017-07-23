@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<script src= "http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+<body>
+
+<div ng-app="myApp" ng-controller="customersCtrl"> 
+
+<select>
+  <option ng-repeat="x in categories">
+    {{ x.name }}
+  </option>
+</select>
+<select ng-repeat="x in categories" ng-show="isVisible(x.id)">
+  <option ng-repeat="y in x.child_categories">{{y.name}}</option>
+</select>
+
+</div>
+
+<script>
+var app = angular.module('myApp', []);
+app.controller('customersCtrl', function($scope, $http) {
+  $http.get("https://emma.pixnet.cc/blog/categories?format=json&user=emmademo")
+  .success(function (response) {
+    $scope.categories = response.categories;
+    $scope.isVisible = function(id){
+      console.log(id+', '+(id == '1424715'));
+        if(id == '1424715') return true;// return false to hide this artist's albums
+        return false;
+    };
+  });
+});
+</script>
+
+</body>
+</html>

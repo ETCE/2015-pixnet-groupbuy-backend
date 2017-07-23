@@ -1,0 +1,31 @@
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script type="text/javascript">
+	$.get('/plogin/', function(data) {
+		w = window.open(data, 'window', 'status=0,menubar=0,resizable=1,width=500,height=500;');
+		var interval = window.setInterval((function() {
+			if (w.closed) {
+				window.clearInterval(interval);
+				$.get('/permission', function(data){
+				if(data.status){
+					var parse = window.location.search;
+					var map = {};
+					var res = parse.split("&"); 
+					res[0] = res[0].slice(1, res[0].length);
+					for(var i = 0; i < res.length; i++){
+						var ss = res[0].split('=');
+						map[ss[0]] = ss[1];
+					}
+					if(data.user == map.user){
+						$.get('http://140.112.26.241/buyit/Plungin/PHP/make_record.php?user_name=' + data.user + '&product_id=' + map.prodcut_name + '&category=' + map.category + '&product_name=haha+food&product_description=' + map.description + '&product_img=' + map.image + '&price=' + map.price + '&isOpen=' + map.isOpen
+						);
+						window.location = "http://140.112.24.241/buyit/list.php";
+					}else{
+						window.location = "http://140.114.24.241/buyit/";
+					}
+				}else{
+					alert("Permission denied, plase try again.");
+				}
+			});
+		}}),1000);
+	});
+</script>

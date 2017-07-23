@@ -1,0 +1,18 @@
+[
+	{
+		"category": "電器用品",
+		"products": ["空氣清淨機", "咖啡機"]
+	},
+	{
+		"category": "生活用品",
+		"products": ["真空悶燒杯"]
+	},
+	{
+		"category": "女性用品",
+		"products": ["壓力襪", "衛生棉", "塑身衣"]
+	},
+	{
+		"category": "玩具",
+		"products": ["黏土"]
+	}
+]

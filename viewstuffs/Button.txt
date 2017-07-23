@@ -1,0 +1,6 @@
+{
+	"category":"女性用品",
+	"product":"塑身衣",
+	"description":"blablabla",
+	"image":"url here"
+}

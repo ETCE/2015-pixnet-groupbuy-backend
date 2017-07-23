@@ -1,0 +1,263 @@
+<html ng-app="pixnetApp">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <title>Pixnet new article</title>
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.14.30/css/bootstrap-datetimepicker.min.css">
+    <link href="css/app.css">
+    <link href="css/editor.css" type="text/css" rel="stylesheet">
+</head>
+
+<body ng-controller="NewArticleCtrl">
+    <div class="container-fluid" style="background-image: url('img/halftone.png');">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <form role="form" id="form">
+                <div class="form-group">
+                    <label for="public_at">
+                        Publish Date
+                    </label>
+                    <input class="form-control" id="public_at" type="text" ng-model="public_at">
+                    <button type="button" class="btn btn-default" onclick="currentTime()">
+                        Current Time
+                    </button>
+                </div>
+                <div class="form-group">
+                    <label for="title">
+                        Subject
+                    </label>
+                    <input class="form-control" id="title" type="text" data-validation="required" ng-model="title">
+                </div>
+                <div class="form-group">
+                    <textarea id="body" ng-model="body"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="tags">
+                        Article Tag
+                    </label>
+                    <input class="form-control" id="tags" type="text" ng-model="tags">
+                </div>
+                <div class="panel-group" id="panel-374693">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a class="panel-title collapsed" data-toggle="collapse" data-parent="#panel-374693" href="#panel-element-968436">Article Category</a>
+                        </div>
+                        <div id="panel-element-968436" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label for="category_id">
+                                        Personal Category
+                                    </label>
+                                    <select class="dropdown form-control" id="category_id" ng-model="category_id">
+                                        <option ng-repeat="item in personal_categories" ng-value="item.id" ng-bind="item.name">1</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" ng-if="personal_child_categories.length > 0">
+                                    <select class="dropdown form-control" id="child_category_id">
+                                        <option ng-repeat="item in personal_child_categories" ng-value="item.id" ng-bind="item.name">1</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="site_category_id">
+                                        Site Category
+                                    </label>
+                                    <select class="dropdown form-control" id="site_category_id" ng-model="site_category_id">
+                                        <option ng-repeat="item in site_categories" ng-value="item.id" ng-bind="item.name">1</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="status">
+                        View Permissions
+                    </label>
+                    <select class="dropdown form-control" id="status" ng-model="status">
+                        <option ng-repeat="item in status_list" ng-bind="item.name" ng-value="item.id">1</option>
+                    </select>
+                </div>
+                <div class="form-group" ng-if="status == 3">
+                    <label for="password">
+                        Password
+                    </label>
+                    <input class="form-control" id="password" type="text">
+                </div>
+                <div class="form-group" ng-if="status == 3">
+                    <label for="password_hint">
+                        Password Hint
+                    </label>
+                    <input class="form-control" id="password_hint" type="text" ng-model="password_hint">
+                </div>
+                <div class="form-group" ng-if="status == 5">
+                    <label for="friend_group_ids">
+                        Specific Groups of Friends
+                    </label>
+                    <div class="input-group">
+                        <label class="radio-inline">
+                            <input type="radio" name="friend_group" ng-model="is_specific_groups_of_friends" checked>All friends
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="friend_group" ng-model="is_specific_groups_of_friends" ng-value="true">Specific Groups of Friends
+                        </label>
+                    </div>
+                    <div ng-if="is_specific_groups_of_friends">
+                        <div class="input-group">
+                            <div class="checkbox" ng-repeat="item in specific_groups_of_friends">
+                                <label>
+                                    <input type="checkbox" value="item.id" ng-model="friend_group_ids">
+                                    <span ng-bind="item.name"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-group" id="panel-374694">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a class="panel-title collapsed" data-toggle="collapse" data-parent="#panel-374694" href="#panel-element-968437">Comment Settings</a>
+                        </div>
+                        <div id="panel-element-968437" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label for="comment_perm">
+                                        Commenting
+                                    </label>
+                                    <select class="dropdown form-control" id="comment_perm" ng-model="comment_perm">
+                                        <option ng-repeat="item in commenting" ng-bind="item.name" ng-value="item.id">1</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="comment_hidden">
+                                        Default Comment Status
+                                    </label>
+                                    <select class="dropdown form-control" id="comment_hidden" ng-model="comment_hidden">
+                                        <option ng-repeat="item in comment_hidden_list" ng-bind="item.name" ng-value="item.id">1</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" ng-if="status == 5">
+                    <div class="input-group">
+                        <label>
+                            <input type="checkbox" ng-model="isOpen"> Is Open
+                        </label>
+                    </div>
+                </div>
+                <div class="panel-group" id="panel-374696">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a class="panel-title collapsed" data-toggle="collapse" data-parent="#panel-374696" href="#panel-element-968439">Group Buying</a>
+                        </div>
+                        <div id="panel-element-968439" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label for="group_buying_category_id">
+                                        Group Buying Category
+                                    </label>
+                                    <select class="dropdown form-control" id="group_buying_category_id" ng-model="category">
+                                        <option ng-repeat="item in group_buying_categories track by $index" ng-bind="item.category" ng-value="$index">1</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" ng-if="category">
+                                    <label for="product_id">
+                                        Product
+                                    </label>
+                                    <select class="dropdown form-control" id="product_id" ng-model="product">
+                                        <option ng-repeat="item in products" ng-bind="item" ng-value="item">1</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="price">
+                                        Price
+                                    </label>
+                                    <input class="form-control" id="price" type="text" ng-model="price">
+                                </div>
+                                <div class="form-group">
+                                    <label for="group_buying_description">Group Buying description:</label>
+                                    <textarea id="group_buying_description" ng-model="description"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="group_buying_image">
+                                        Image
+                                    </label>
+                                    <input id="group_buying_image" type="filepicker" data-fp-apikey="A3A90lMOSSF6nblbkHJxoz" onchange="angular.element(this).scope().filepicker(event.fpfile.url)">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <input type="submit" value="Submit" class="btn btn-default">
+            </form>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+    <div class="container-fluid footer" style="background-image: url('halftone.png');">
+        <p class="pull-right">&copy;
+            <script>
+            document.write(new Date().getFullYear())
+            </script>BuyIt. All rights reserved.</p>
+    </div>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.2.1/jquery.form-validator.min.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.14.30/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+    <script src="js/editor.js"></script>-
+    <script type="text/javascript" src="js/controller.js"></script>
+    <script type="text/javascript" src="//api.filepicker.io/v2/filepicker.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        $("#body").Editor();
+        $("#group_buying_description").Editor();
+        $.validate();
+        var url = '';
+        var w = '';
+        $("form").submit(function(e) {
+            e.preventDefault(); // this will prevent from submitting the form.
+            $.get('/plogin/', function(data) {
+                w = window.open(data, 'window', 'status=0,menubar=0,resizable=1,width=500,height=500;');
+                var interval = window.setInterval((function() {
+                    if (w.closed) {
+                        window.clearInterval(interval);
+                        $.get('/permission', function(data) {
+                            if (data.status) {
+                                angular.element($('#form')).scope().user = data.user;
+                                angular.element($('#form')).scope().body = $("#body").Editor("getText");
+                                angular.element($('#form')).scope().description = $("#group_buying_description").Editor("getText");
+                                angular.element($('#form')).scope().submit();
+                            } else {
+                                alert("Permission denied, plase try again.");
+                            }
+                        });
+                    }
+                }), 1000);
+            });
+        });
+    });
+
+    $(function() {
+        $('#public_at').datetimepicker({
+            format: "YYYY-MM-DD HH:mm:ss"
+        });
+        $('#public_at').trigger('input');
+    });
+    var currentTime = function() {
+        var current = moment().format("YYYY-MM-DD HH:mm:ss");
+        $('#public_at').val(current);
+        $('#public_at').trigger('input');
+    }
+
+    $('#public_at').on('dp.change', function(e) {
+        $('#public_at').trigger('input');
+    });
+    </script>
+</body>
+
+</html>
